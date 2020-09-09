@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlaccidVertex : MonoBehaviour
+public class RiggedJellybody : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
