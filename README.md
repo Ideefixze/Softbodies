@@ -66,6 +66,10 @@ I used his code to generate spheres that blend together. Then, those spheres are
 Looks good, but Raymarching in Unity is not a fast way to render objects with droplet count bigger that 8. So it is completely unpractical. However, this is a good example of using our primary idea that all jellies are just springs in disguise.
 
 
+## Skinned Mesh Renderer in Unity
+...
+
+
 ## The Grand Finale
 
 If you want to play with Softbodies: clone repository and use Unity to check how it works.
