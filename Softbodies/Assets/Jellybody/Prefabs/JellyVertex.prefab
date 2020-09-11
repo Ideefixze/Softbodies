@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3790314136247859868}
   - component: {fileID: 3790314136247859867}
   - component: {fileID: 3790314136247859865}
-  - component: {fileID: -5816937280891944897}
+  - component: {fileID: 7523356349279814319}
   m_Layer: 0
   m_Name: JellyVertex
   m_TagString: Untagged
@@ -99,8 +99,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!65 &-5816937280891944897
-BoxCollider:
+--- !u!135 &7523356349279814319
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -110,5 +110,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 0.1}
+  m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}

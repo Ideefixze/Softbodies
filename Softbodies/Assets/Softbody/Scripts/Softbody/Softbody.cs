@@ -10,7 +10,7 @@ namespace Softbodies
     {
         public float bounciness;
         public float stiffness;
-        public float onCollisionReaction;
+        public float onCollisionForce;
 
         private Mesh _originalMesh;
         private Vector3[] _originalVertices;
@@ -21,6 +21,15 @@ namespace Softbodies
         // Start is called before the first frame update
         void Start()
         {
+            InitVertices();
+            
+        }
+
+        /// <summary>
+        /// Reads the original mesh and initializes SoftVertices.
+        /// </summary>
+        private void InitVertices()
+        {
             _originalMesh = GetComponent<MeshFilter>().mesh;
             _originalVertices = _originalMesh.vertices;
             _vCount = _originalVertices.Length;
@@ -29,16 +38,18 @@ namespace Softbodies
 
             for (int i = 0; i < _vCount; i++)
             {
-                _softVertices[i] = new SoftVertex(i,_originalVertices[i]);
-                //_softVertices[i].ApplyPressure(new Vector3(_softVertices[i].vertexPosition.x*_softVertices[i].vertexPosition.x, 0,0) *10000f);
+                _softVertices[i] = new SoftVertex(i, _originalVertices[i]);
             }
-            
         }
 
         // Update is called once per frame
         void FixedUpdate()
         {
+            UpdateSoftbody(); 
+        }
 
+        private void UpdateSoftbody()
+        {
             for (int i = 0; i < _vCount; i++)
             {
                 _softVertices[i].UpdateVertex();
@@ -49,10 +60,14 @@ namespace Softbodies
 
             _originalMesh.vertices = _deformedVertices;
             _originalMesh.RecalculateBounds();
-            //_originalMesh.RecalculateNormals();
             _originalMesh.RecalculateTangents();
+
+            //Third-party Recalculate Normals because Unity's RecalculateNormals make meshes normals to have seams
+            NormalSolver.RecalculateNormals(_originalMesh, 60);
+            
         }
 
+        //Applies pressure to all vertices from input position
         public void ApplyPressure(Vector3 position, float pressure)
         {
             for (int i = 0; i < _vCount; i++)
@@ -68,7 +83,7 @@ namespace Softbodies
             foreach (var cp in cps)
             {
                 Debug.Log(cp.point);
-                ApplyPressure(cp.point, coll.relativeVelocity.magnitude* onCollisionReaction);
+                ApplyPressure(cp.point, coll.relativeVelocity.magnitude*onCollisionForce);
             }
         }
     }

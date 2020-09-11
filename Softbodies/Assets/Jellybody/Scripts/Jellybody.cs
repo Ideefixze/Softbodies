@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Softbodies
 {
+ 
     public struct Vector3WithID
     {
         public int id;
@@ -33,12 +34,18 @@ namespace Softbodies
         //How much triangles there are
         private int _tCount;
 
+        [Tooltip("Strength of each spring.")]
         [SerializeField]
         private float _spring;
+        [Tooltip("Damper of each spring.")]
         [SerializeField]
         private float _damper;
+        [Tooltip("GameObject created on each vertex. Should have Rigidbody and a collider.")]
         [SerializeField]
         private GameObject _jellyVertex;
+        [Tooltip("Creates springs on mesh triangles rather than between each vertex. Experimental. May cause unexpected behaviour.")]
+        [SerializeField]
+        private bool _springsOnTriangles = false;
 
         void Start()
         {
@@ -59,16 +66,24 @@ namespace Softbodies
 
         }
 
+        /// <summary>
+        /// Creates mapping for the same vertices used in different triangles.
+        /// <para>For example: One vertex in a 8-vertex cube appears in three faces making total of 24 vertices in memory.
+        /// We should create only one JellyVertex on this multiple-appearing vertex for optimization. This function creates a mapping of JellyVertex to it's mesh vertices.</para>
+        /// </summary>
         private void MapMeshVerticesToJellyVertices()
         {
+            //Init
             _jellyVertexToMeshVertex = new Dictionary<int, int[]>();
             List<Vector3WithID> vids = new List<Vector3WithID>();
 
+            //Create a struct of Vector3 with ID so we can easier find vertices with the same position but different id
             for (int i = 0; i < _vCount; i++)
             {
                 vids.Add(new Vector3WithID(i, _originalMesh.vertices[i]));
             }
 
+            //Group by position (this will give us all vertices with the same position but different id in Groupings
             var groups = vids.GroupBy(v => v.vertex);
 
 
@@ -85,13 +100,17 @@ namespace Softbodies
                     j++;
                 }
 
-                //...to next id of jelly vertex
+                //...to id of jelly vertex
                 _jellyVertexToMeshVertex.Add(k, verts);
                 k++;
             }
+            //Also remember how many distinct vertices there are
             _distinctVCount = k;
         }
 
+        /// <summary>
+        /// Inits vertices on mesh vertices and creates springs between them.
+        /// </summary>
         private void CreateJellybodyFromVertices()
         {
 
@@ -103,19 +122,39 @@ namespace Softbodies
             }
 
 
-
-            for (int i = 0; i < _distinctVCount; i++)
+            if(_springsOnTriangles)
             {
-                for (int j = 0; j < _distinctVCount; j++)
+                for(int i = 0; i<_tCount;i++)
                 {
-                    if (i != j)
-                    {
-                        CreateSpringOnVertices(i, j);
-                    }
+                    int[] t = new int[3];
+                    t[0] = _originalMesh.triangles[i];
+                    t[1] = _originalMesh.triangles[i+1];
+                    t[2] = _originalMesh.triangles[i+2];
+                    CreateSpringOnTriangle(t);
 
+                    i++;
+                    i++;
                 }
             }
+            else
+            {
+                for (int i = 0; i < _distinctVCount; i++)
+                {
+                    for (int j = 0; j < _distinctVCount; j++)
+                    {
+                        if (i != j)
+                        {
+                            CreateSpringOnVertices(i, j);
+                        }
 
+                    }
+                }
+            }
+            
+            //Make spring with the center of a mesh
+            //This makes our object more stable and makes transform's center to be close to the mesh center
+            //Without this, our mesh vertices would move too far away from object position
+            //Making this mesh unrenderable
             for (int i = 0; i < _distinctVCount; i++)
             {
                 CreateSpringWithCore(i);
@@ -123,6 +162,10 @@ namespace Softbodies
         }
 
 
+        /// <summary>
+        /// Recreates original mesh after jellyfication.
+        /// Maps JellyVertices to the mesh vertices updating their position by their coresponding JellyVertex.
+        /// </summary>
         private void UpdateJellybody()
         {
             for (int i = 0; i < _distinctVCount; i++)
