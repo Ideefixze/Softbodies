@@ -75,3 +75,9 @@ Looks good, but Raymarching in Unity is not a fast way to render objects with dr
 If you want to play with Softbodies: clone repository and use Unity to check how it works.
 
 
+## Other ideas for Softbodies
+
+
+https://www.youtube.com/watch?v=mCGVxMqHYUk
+
+https://assetstore.unity.com/packages/tools/physics/obi-softbody-130029?aid=1011l34eQ&utm_source=aff
