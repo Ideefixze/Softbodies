@@ -12,16 +12,22 @@ However, this README has an information on how to make it regardless of engine, 
 ## Basics of Meshes
 
 Each mesh has a lot of data in it. In the simplest form, mesh consists of vertices (points in a space) and triangles (defined by those points).
+
 Generating your own mesh isn't a hard task: just give it some points, tell which points generate triangle and *voilà*.
 
 Mesh, that changes it's shape over time, should update it's vertices each frame, so the rendered object fits our data.
 
 For example: 
-Create a water surface as a point grid.
-Create triangles, so each square of an grid consists of two triangles.
-Each point on the grid can be updated each frame with a function: ```y = sin(x + Time.deltaTime)``` in a shader or in some code.
-This creates simple 3D water waves.
+
+    1. Create a water surface as a point grid.
+
+    2. Create triangles, so each square of an grid consists of two triangles.
+
+    3. Each point on the grid can be updated each frame with a function: y = sin(x + Time.deltaTime) in a shader or in some code.
+       This creates simple 3D water waves.
+
 If it's a vertex shader: job is done.
+
 If we done it in a code (e.g. MonoBehaviour Unity) we should also update our current mesh with: ```mesh.vertices = waveVertices``
 
 ## Basics of Softbodies and Jellies
