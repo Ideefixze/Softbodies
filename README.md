@@ -45,11 +45,11 @@ This works pretty well with static object that can be touched and their shape do
 
 ## Jellybody - Springs and the Mesh
 
-The basic concept of all dynamic and jelly-like bodies is to use springs: connection between points that makes them remain their original position. If we set those points at the vertices of a mesh, and make connections between each vertex pair... we could manipulate a mesh into behaving like a jelly. Also those points should have some kind of mass to simulate physics with (Rigidbody in Unity).
+The basic concept of all dynamic and jelly-like bodies is to use springs: connection between points that makes them remain their original distance. If we set those points at the vertices of a mesh, and make connections between each vertex pair... we could manipulate a mesh into behaving like a jelly. Then, those jelly vertices are mapped into mesh vertices, so mesh can be changed. Also those points should have some kind of mass to simulate physics with (Rigidbody in Unity). 
 
 ![](jellybody.gif)
 
-This solution is fairly simple but may be computationally expensive with complicated Meshes. With compute shaders this should work fairly fast.
+This solution is fairly simple but may be computationally expensive with complicated Meshes because of springs... With compute shaders this should work fairly fast.
 
 There is one **big** problem with this: colliders.
 
@@ -66,7 +66,7 @@ I used his code to generate spheres that blend together. Then, those spheres are
 Looks good, but Raymarching in Unity is not a fast way to render objects with droplet count bigger that 8. So it is completely unpractical. However, this is a good example of using our primary idea that all jellies are just springs in disguise.
 
 
-## What's next?
+## The Grand Finale
 
 If you want to play with Softbodies: clone repository and use Unity to check how it works.
 
