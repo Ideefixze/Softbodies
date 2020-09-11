@@ -1,5 +1,5 @@
 # Softbodies
-Softbodies, Jiggly items and other slimy stuff in Unity
+Softbodies, jiggly items and other slimy stuff in Unity
 
 ## Description
 
