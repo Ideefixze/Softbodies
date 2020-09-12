@@ -22,10 +22,11 @@ namespace Softbodies
     [RequireComponent(typeof(MeshFilter))]
     public class Jellybody : MonoBehaviour
     {
-        private Mesh _originalMesh;
-        private GameObject[] _jellyVertices;
-        private Dictionary<int, int[]> _jellyVertexToMeshVertex;
-        private Vector3[] _deformedVertices;
+        private Mesh _originalMesh;                                 //Mesh we started with
+        private GameObject[] _jellyVertices;                        //Jelly vertices objects
+        private Dictionary<int, int[]> _jellyVertexToMeshVertex;    //Mapping of each jelly vertics to multiple mesh vertices
+        private List<KeyValuePair<int,int>> _springs;               //To check if spring pairs are not duplicate
+        private Vector3[] _deformedVertices;                        //Currently deformed vertices
 
         //How much distinct vertices there are
         private int _distinctVCount;
@@ -43,7 +44,7 @@ namespace Softbodies
         [Tooltip("GameObject created on each vertex. Should have Rigidbody and a collider.")]
         [SerializeField]
         private GameObject _jellyVertex;
-        [Tooltip("Creates springs on mesh triangles rather than between each vertex. Experimental. May cause unexpected behaviour.")]
+        [Tooltip("Creates springs on mesh triangles rather than between each vertex. Experimental.")]
         [SerializeField]
         private bool _springsOnTriangles = false;
 
@@ -63,6 +64,8 @@ namespace Softbodies
 
             _jellyVertices = new GameObject[_vCount];
             _deformedVertices = new Vector3[_vCount];
+
+            _springs = new List<KeyValuePair<int,int>>();
 
         }
 
@@ -183,22 +186,49 @@ namespace Softbodies
         private void CreateSpringOnTriangle(int[] triangle)
         {
             //0 -> 1
-            CreateSpringOnVertices(triangle[0], triangle[1]);
+            CreateSpringOnMeshVertices(triangle[0], triangle[1]);
             //0 -> 2
-            CreateSpringOnVertices(triangle[0], triangle[2]);
+            CreateSpringOnMeshVertices(triangle[0], triangle[2]);
             //1 -> 2
-            CreateSpringOnVertices(triangle[1], triangle[2]);
+            CreateSpringOnMeshVertices(triangle[1], triangle[2]);
         }
         
         private void CreateSpringOnVertices(int a, int b)
         {
+            //Avoid duplicate springs between pairs
+            if (_springs.Contains(new KeyValuePair<int, int>(a,b)))
+            {
+                return;
+            }
+            Debug.Log(a);
             SpringJoint s = _jellyVertices[a].AddComponent<SpringJoint>();
             s.connectedBody = _jellyVertices[b].GetComponent<Rigidbody>();
             s.spring = _spring;
             s.damper = _damper;
+            _springs.Add(new KeyValuePair<int, int>(a,b));
             //s.maxDistance = Vector3.Distance(_flaccidVertices[a].transform.localPosition, _flaccidVertices[b].transform.localPosition);
             //s.minDistance = Vector3.Distance(_flaccidVertices[a].transform.localPosition, _flaccidVertices[b].transform.localPosition);
             
+        }
+
+        private void CreateSpringOnMeshVertices(int a, int b)
+        {
+            int akey = 0;
+            int bkey = 0;
+            //Find mapping that has a and b
+            foreach (var mapping in _jellyVertexToMeshVertex)
+            {
+                if (mapping.Value.Contains(a))
+                {
+                    akey = mapping.Key;
+                }
+                if (mapping.Value.Contains(b))
+                {
+                    bkey = mapping.Key;
+                }
+            }
+
+            CreateSpringOnVertices(akey,bkey);
         }
 
         private void CreateSpringWithCore(int a)
