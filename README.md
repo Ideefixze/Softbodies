@@ -57,7 +57,7 @@ There is one **big** problem with this: colliders.
 
 Changing collider each frame can't be done for bigger meshes as it it too complex and mesh colliders are really slow compared to primitive shape (sphere) coliders. In 2D this shouldn't be a big problem, making Jellybody a good candidate for jellylike objects in 2D worlds. In my project I added a small colliders on each jelly vertex and a sphere collider inside. This should fake the lack of dynamic collider.
 
-**Repository: Jellybody - contains class that creates vertices (and mesh-JellyVertex mapping for duplicate vertices) and springs. Also updates mesh. **
+**Repository: Jellybody - contains class that creates vertices (and mesh-JellyVertex mapping for duplicate vertices) and springs. Also updates mesh.**
 
 ## Fluidbody - Springs and Raymarching
 
@@ -69,7 +69,7 @@ I used his code to generate spheres that blend together. Then, those spheres are
 
 Looks good, but Raymarching in Unity is not a fast way to render objects with droplet count bigger that 8. So it is completely unpractical. However, this is a good example of using our primary idea that all jellies are just springs in disguise.
 
-**Repository: Fluidbody - contains class that instantiates Shapes and creates springs with the center point. **
+**Repository: Fluidbody - contains class that instantiates Shapes and creates springs with the center point.**
 
 ## Skinned Mesh Renderer in Unity
 
