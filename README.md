@@ -23,7 +23,7 @@ For example:
 
     2. Create triangles, so each square of an grid consists of two triangles.
 
-    3. Each point on the grid can be updated each frame with a function: y = sin(x + Time.deltaTime) in a shader or in some code.
+    3. Each point on the grid can be updated each frame with a function: y = sin(x + Time.time) in a shader or in some code.
        This creates simple 3D water waves.
 
 If it's a vertex shader: job is done.
