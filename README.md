@@ -69,6 +69,8 @@ I used his code to generate spheres that blend together. Then, those spheres are
 
 Looks good, but Raymarching in Unity is not a fast way to render objects with droplet count bigger that 8. So it is completely unpractical. However, this is a good example of using our primary idea that all jellies are just springs in disguise.
 
+Bonus: to speed up sphere rendering, you could use Meta Balls and Marching Cubes algorithm. 
+
 **Repository: Fluidbody - contains class that instantiates Shapes and creates springs with the center point.**
 
 ## Skinned Mesh Renderer in Unity
