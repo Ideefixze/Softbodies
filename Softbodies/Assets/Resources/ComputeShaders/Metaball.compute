@@ -1,0 +1,30 @@
+﻿#pragma kernel Metaball
+
+static const int numThreads = 8
+;
+
+RWStructuredBuffer<float4> points;
+
+int sizeX;
+int sizeY;
+int sizeZ;
+float3 pos;
+float radius;
+
+int indexFromCoord(int x, int y, int z) {
+    return (x * sizeY + y) * sizeX + z;
+}
+[numthreads(numThreads, numThreads, numThreads)]
+void Metaball(int3 id : SV_DispatchThreadID)
+{
+    // Stop if too far
+    if (id.x >= sizeX || id.y >= sizeY || id.z >= sizeZ) {
+        return;
+    }
+    int idp = indexFromCoord(id.x, id.y, id.z);
+    float4 p = points[idp];
+    float d = radius / ((p.x - pos.x)* (p.x - pos.x) + (p.y - pos.y)* (p.y - pos.y) + (p.z - pos.z)* (p.z - pos.z));
+
+    points[idp] = float4(points[idp].xyz, points[idp].w - d);
+    
+}

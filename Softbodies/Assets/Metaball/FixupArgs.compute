@@ -1,0 +1,17 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+struct DrawCallArgsBuffer
+{
+    uint vertexCountPerInstance;
+    uint instanceCount;
+    uint startVertexLocation;
+    uint startInstanceLocation;
+};
+RWStructuredBuffer <DrawCallArgsBuffer> DrawCallArgs;
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    DrawCallArgs[0].vertexCountPerInstance *= 3;
+}
