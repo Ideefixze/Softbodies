@@ -466,7 +466,9 @@ MonoBehaviour:
   _sizeZ: 60
   _spaceBetweenPoints: 0.5
   _defaultValue: 0.5
-  marchingShader: {fileID: 7200000, guid: 21c4d401effb2654d822731b739d3b8e, type: 3}
+  _drawBuffer: {fileID: 2100000, guid: 4166ab29b80d8aa43b9948eefc62df9b, type: 2}
+  _marchingShader: {fileID: 7200000, guid: 21c4d401effb2654d822731b739d3b8e, type: 3}
+  _fixupArgsCount: {fileID: 7200000, guid: 118ec5f9688d46a4e98dc9b001afb23e, type: 3}
 --- !u!4 &1856387841
 Transform:
   m_ObjectHideFlags: 0
